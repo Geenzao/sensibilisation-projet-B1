@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class OpenableDoor : MonoBehaviour
 {
   private Animator _animator;
   private AudioSource _audioSource;
+  [SerializeField] private AudioClip _openDoorSound;
+  [SerializeField] private AudioClip _closeDoorSound;
   private bool _isOpen = false;
 
   void Start()
@@ -22,6 +25,9 @@ public class OpenableDoor : MonoBehaviour
     if (!_isOpen)
     {
       _animator.SetTrigger("Open");
+      if (_audioSource.isPlaying && _audioSource.clip == _openDoorSound)
+        _audioSource.Stop();
+      _audioSource.PlayOneShot(_openDoorSound);
       _isOpen = true;
     }
   }
@@ -31,6 +37,8 @@ public class OpenableDoor : MonoBehaviour
     if (_isOpen)
     {
       _animator.SetTrigger("Close");
+      _audioSource.Stop();
+      _audioSource.PlayOneShot(_closeDoorSound);
       _isOpen = false;
     }
   }
